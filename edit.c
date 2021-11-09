@@ -13,7 +13,12 @@
 
 /*** data ***/
 
-struct termios orig_termios;
+struct editor_config 
+{
+    struct termios orig_termios;
+};
+
+struct editor_config E;
 
 /*** terminal ***/
 
@@ -28,18 +33,18 @@ void die(const char *s)
 
 void disable_raw_mode()
 {
-    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1)
+    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &E.orig_termios) == -1)
         die("tcsetattr");
 }
 
 void enable_raw_mode()
 {
-    if (tcgetattr(STDIN_FILENO, &orig_termios) == -1)
+    if (tcgetattr(STDIN_FILENO, &E.orig_termios) == -1)
         die("tcgetattr");
 
     atexit(disable_raw_mode);
 
-    struct termios raw = orig_termios;
+    struct termios raw = E.orig_termios;
     cfmakeraw(&raw);
     raw.c_cc[VMIN] = 0;  /* read as soon as we have input */
     raw.c_cc[VTIME] = 1; /* set read timeout to 1/10s (or 100ms) */
