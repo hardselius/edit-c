@@ -16,6 +16,8 @@
 
 struct editor_config
 {
+    int screenrows;
+    int screencols;
     struct termios orig_termios;
 };
 
@@ -120,6 +122,12 @@ void editor_process_keypress()
 }
 
 /*** init ***/
+
+void init_editor()
+{
+    if (get_window_size(&E.screenrows, &E.screencols) == -1)
+        die("get_window_size");
+}
 
 int main()
 {
