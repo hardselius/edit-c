@@ -132,6 +132,7 @@ void init_editor()
 int main()
 {
     enable_raw_mode();
+    init_editor();
 
     while (1)
     {
